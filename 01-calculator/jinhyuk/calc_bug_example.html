@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Calculator</title>
+<style>
+div.calc {
+  width: 130px;
+}
+button.calc {
+  width: 30px;
+}
+
+</style>
+<script>
+    var buttons = [ "1", "2", "3", "+", // 3
+                    "4", "5", "6", "-", // 7
+                    "7", "8", "9", "*", // 11
+                    "0", "=", "c", "/" ]; // 15
+
+    function buttonClick(value) {
+        var inputNumber = $('#inputNumber');
+        switch (value) {
+        case '=':
+            inputNumber.val(eval(inputNumber.val()));
+            break;
+        case 'c':
+            inputNumber.val('');
+            break;
+        default:
+            inputNumber.val(inputNumber.val() + value);
+        }
+    }
+
+    var num = [""];
+    var calcWord = "";
+    var numPosition = 0;
+
+    var numReg = new RegExp("[0-9]");
+    var calcReg = new RegExp("[+-/*]");
+    var etcReg = new RegExp("[=c]");
+    
+    var isKeyDown = false;
+
+    function buttonClickNonEval(value) {
+        if(numReg.test(value)) {
+            if(num[numPosition] === undefined) {
+                num[numPosition] = "";
+            }
+            num[numPosition] += value;
+            console.log("num[numPosition] : " + num[numPosition]);
+        }else if(calcReg.test(value)) {
+            if(calcWord !== ""){
+                calc();
+            }else{
+                calcWord = value;
+                numPosition++;
+            }
+        }else if(value == 'c') {
+            initCalc(true);
+        }else if(value == '=') {
+            calc();
+        }
+        console.log("inputNumber val : " + $('#inputNumber').val());
+        console.log("set before num[numPosition] : " + num[numPosition]);
+        $('#inputNumber').val(num[numPosition]);
+        /* input 태그에 키보드로 숫자 입력시 입력된값 + 입력한값 + 입력한값 이 표시되는 버그.
+         * 68line 의 $('#inputNumber').val(num[numPosition]); 가 먼저 동작하여 
+         * num[numPosition] 의 값이 input 태그에  set 된 후 input 태그의 keypress 기본이벤트가 동작하여
+         * 입력한 word 값을 $('#inputNumber').val() 값 뒤로 append 하는걸로 보입니다.
+         *
+         * 68line 전에 break point 잡고 테스트를 진행해보면 비정상 동작이 보이지 않는걸로 보면 
+         * 이벤트 실행은 비동기로 호출되는거 같은데 call 순서가 직접 추가한 on('keydown' ... 이벤트를 먼저 호출해서  
+         * 항상 입력값이 추가되서 표시된게 아닌지 싶은데.. 이벤트 호출에 대해 좀더 공부해 보겠습니다.
+         */
+    }
+
+    function calc() {
+        if(num.length != 2 || calcWord == ""){
+            return;
+        }
+        var ret = "";
+        switch (calcWord) {
+        case '+':
+            ret = Number(num[0]) + Number(num[1]);
+            break;
+        case '-':
+            ret = Number(num[0]) - Number(num[1]);
+            break;
+        case '*':
+            ret = Number(num[0]) * Number(num[1]);
+            break;
+        case '/':
+            ret = Number(num[0]) / Number(num[1]);
+            break;
+        default:
+            initCalc(true);
+        }
+        $('#inputNumber').val(ret);
+        initCalc();
+    }
+
+	function initCalc(isValueClear) {
+	    num = [""];
+	    calcWord = "";
+        numPosition = 0;
+        if(isValueClear) {
+          $('#inputNumber').val("");
+        }
+    }
+
+    function getLastWord(str){
+        if(str){
+            return str.substring(str.length-1);
+        }else{
+            return "";
+        }
+    }
+
+    window.onload = function() {
+        for (var i = 0; i < buttons.length; i++) {
+            var btn = $('<button>');
+            btn.text(buttons[i]);
+            btn.addClass('calc')
+            $('div').append(btn);
+        }
+
+        $('body button').on('click', function() {
+            buttonClickNonEval($(this).text());
+        });
+
+        $('#inputNumber').on('keydown', function(event) {
+            var inputWord = String.fromCharCode(event.keyCode);
+            console.log("keydown word : " + inputWord);
+            // valid check
+            if(!(numReg.test(inputWord) || calcReg.test(inputWord) || etcReg.test(inputWord))) {
+                $('#inputNumber').val(num[numPosition]);
+                return;
+            }
+
+            if(isKeyDown) {
+                $('#inputNumber').val($('#inputNumber').val().substring(0,$('#inputNumber').val().length - 1));
+                return;
+            }else{
+                isKeyDown = true;
+                if(event.which == 8) {
+                    console.log($(this).val());
+                    num[numPosition] = $(this).val();
+                    return;
+                }
+                buttonClickNonEval(inputWord);
+                isKeyDown = false;
+            }
+        })
+    }
+</script>
+</head>
+<body>
+  <input type="text" id="inputNumber" /><br>
+  <div class="calc"></div>
+</body>
+</html>
