@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Calculator</title>
+<style>
+#inputNumber {
+  width: 120px;
+}
+input.viewSign {
+  width: 20px;
+  text-align:center;
+}
+div.calc {
+  width: 130px;
+}
+button.calc {
+  width: 30px;
+}
+</style>
+</head>
+<body>
+  <input type="text" id="inputNumber" />
+  <input type="text" class="viewSign" disabled/> <br>
+  <div class="calc"></div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+<script src="./calc.js"></script>
+<script>
+$(document).ready(function() {
+    calc.createCalc($('div'));
+})
+</script>
+</html>
