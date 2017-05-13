@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="cache-control" content="no-cache" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Insert title here</title>
+<script>
+//window.document.write( type of " korea");
+
+
+function MkDiv() {
+	this.element = null; //member var
+	this.make = function(id, w, h, c ) {
+		//
+		this.element = document.createElement("div");
+		this.element.id = id;
+		this.element.style.width = w+"px";
+		this.element.style.height = h + "px";
+		this.element.style.backgroundColor = c;
+		console.log(this);
+		return this.element;
+	}
+	
+	
+}
+
+window.onload = function() {
+	var newDiv = new MkDiv().make("newDiv", 300, 300, "red");
+	document.body.appendChild(newDiv);
+	
+	var md = new MkDiv();
+	var colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Navy", "violet"];
+	for (var i = 0; i < colors.length; i++) {
+		var newDiv = md.make("id"+i, 50, 300, colors[i]);
+		newDiv.style.float = "left";
+		document.body.appendChild(newDiv);
+		
+	}
+}
+
+
+
+// window.document.write(" korea");
+// console.log(typeof "K");
+// console.log(typeof new Array());
+
+// var arr1 = new Array();
+
+// (function() {
+// 	alert("1");
+// })();
+
+// test01 = function() {
+// 	alert("test01 함수 호출");
+// }
+
+// function test02(x,y){
+// 	alert("test02 함수 호출 ! 결과 = " + (x + y ) );
+// 	return x + y;
+// }
+
+// window.onload = function() {
+// 	var btn03 = document.getElementById("btn03");
+// 	btn03.onclick = function() {
+// 		document.write("result = " + test02(50, 60) );
+// 	}
+// }
+</script>
+</head>
+<body>
+<button onclick="javascript:test01()">함수1 호출</button>
+<button onclick="test02(10,20)">test02 함수 호출</button>
+<button id="btn03">함수 호출2</button>
+</body>
+</html>
