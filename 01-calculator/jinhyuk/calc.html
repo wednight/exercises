@@ -101,7 +101,7 @@ button.calc {
     }
 
     window.onload = function() {
-        for (var i = 0; i < buttons.length; i++) {
+        for (var i in buttons ) {
             var btn = $('<button>');
             btn.text(buttons[i]);
             btn.addClass('calc')
