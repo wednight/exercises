@@ -91,8 +91,6 @@ var calc;
                         if (numReg.test(String.fromCharCode(event.keyCode))) {
                             inputWord = String.fromCharCode(event.keyCode);
                         } else {
-                            // 기본이벤트(input 태그 텍스트 추가 focus 젤뒤로 이동 등) 중단
-                            event.preventDefault();
                             if (event.shiftKey && event.which == 187) {
                                 inputWord = '+';
                             } else if (event.which == 189) {
@@ -117,6 +115,8 @@ var calc;
                                 // 아닐경우 preventDefault 만 동작하게됨
                                 return false;
                             }
+                            // 기본이벤트(input 태그 텍스트 추가 focus 젤뒤로 이동 등) 중단
+                            event.preventDefault();
                         }
                         $ctl.buttonClickNonEval(inputWord);
                     })

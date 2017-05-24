@@ -46,7 +46,7 @@ button.calc {
     var calcWord = "";
 
     var numReg = new RegExp("[0-9]");
-    var calcReg = new RegExp("[+-/*]");
+    var calcReg = new RegExp("[+\-/*]");
     var etcReg = new RegExp("[=c]");
 
     function buttonClickNonEval(value, eventType) {
@@ -122,8 +122,6 @@ button.calc {
             if(numReg.test(String.fromCharCode(event.keyCode))) {
                 inputWord = String.fromCharCode(event.keyCode);
             }else {
-                // 기본이벤트(input 태그 텍스트 추가 focus 젤뒤로 이동 등) 중단
-                event.preventDefault();
                 if(event.shiftKey && event.which == 187) {
                     inputWord = '+';
                 }else if(event.which == 189) {
@@ -143,6 +141,8 @@ button.calc {
                     // jquery 에서 return false 는 위 1,2 번 모두 동작을함, jquery 가 아닐경우 preventDefault 만 동작하게됨
                     return false;
                 }
+                // 기본이벤트(input 태그 텍스트 추가 focus 젤뒤로 이동 등) 중단
+                event.preventDefault();
                 $('input.viewSign').val(inputWord);
             }
             buttonClickNonEval(inputWord);
